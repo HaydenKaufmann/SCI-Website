@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <html lang="en">
+      <title>
+        Xscape
+      </title>
+      <script src="plant.js">
+      </script>
+      <link rel="stylesheet" href="styles.css">
+      <link rel="icon" type="image/png" sizes="32x32" href="https://i.ibb.co/GnKVjZ5/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="https://i.ibb.co/mhR0CLd/favicon-16x16.png">
+  </head>
+  
+  <body onload="displayPlant()">
+  </body>
+  
+  <body>
+    <header>
+      <h1 style="font-size: 48px; font-weight: bold; font-family: Arial, sans-serif; text-align: center;">
+        Xscape
+      </h1>
+      <nav style="font-size: 20px; letter-spacing: 2px;">
+        <a href="index.html">
+          Plant Database
+        </a>
+        &nbsp;|&nbsp;
+        <a href="Xeriscaping.html">
+          What is Xeriscaping?
+        </a>
+        &nbsp;|&nbsp;
+        <a href="Past.html">
+          Our Past
+        </a>
+        &nbsp;|&nbsp;
+        <a href="Current.html">
+          Development
+        </a>
+        &nbsp;|&nbsp;
+        <a href="Future.html">
+          Our Future
+        </a>
+        &nbsp;|&nbsp;
+        <a href="AboutUs.html">
+          About Us
+        </a>
+      </nav>
+    </header>
+    <main>
+      <div style="border: 2px solid rgb(35, 35, 35); padding: 10px; background-color: rgb(35, 35, 35);">
+        <h1 style="text-align: center;">
+          Welcome to our Xeriscaping Plant Database!
+        </h1>
+        <p style="text-align: center;">
+          Our database is dedicated to helping you create a water-wise and eco-friendly
+          garden through the use of Xeriscaping plants. Whether you're a seasoned
+          gardener or a beginner, we hope you'll find our resources useful in creating
+          a beautiful and sustainable landscape.
+        </p>
+        <p style="text-align: center;">
+          Happy Xeriscaping!
+        </p>
+      </div>
+      <div class="center-container">
+        <label for="userString">
+          Search for a plant:
+        </label>
+        <input type="text" id="userString" style="width: 200px; height: 25px;">
+        <button onclick="displayPlant(0)">
+          Submit
+        </button>
+        <button class="feeling-lucky-button" onclick="displayPlant(1)">
+          I'm Feeling Lucky
+        </button>
+      </div>
+      <h1>
+      </h1>
+      <div id="plant-info">
+      </div>
+      <div class="plant">
+      </div>
+      <script>
+        function displayPlant(choice) {
+          var inputString = document.getElementById("userString").value;
+          const plantInfoDiv = document.getElementById('plant-info');
+          const buttonContainer = document.getElementById('button-container');
+          buttonContainer.innerHTML = ''; // clear the button container
+
+          if (inputString != "" && choice == 0) {
+            plantInfoDiv.innerHTML = '<h4>You searched for: "' + inputString + '"</h4>';
+          }
+          if (inputString == "" && choice == 0) {
+            plantInfoDiv.innerHTML = '<h4></h4>';
+          }
+
+          if (choice == 1) {
+            inputString = "";
+          }
+
+          var count = 0;
+
+          for (let i = 0; i < plants.length; i++) {
+            if (plants[i].comName.toLowerCase().includes(inputString.toLowerCase()) || inputString == "") {
+              count++;
+              if (choice == 1) {
+                var currP = Math.floor(Math.random() * plants.length);
+                plantInfoDiv.innerHTML = '<h4>You got plant number: ' + currP + '</h4>';
+                i = currP;
+              }
+              // Create a new button element
+              const button = document.createElement('button');
+              button.className = 'modalButton';
+              button.innerHTML = printPlantModal(plants[i]);
+
+              // Add an event listener to the button that displays the modal
+              button.addEventListener('click',
+              function() {
+                const modal = document.getElementById('myModal');
+                const plantDiv = document.getElementById('plant');
+                plantDiv.innerHTML = printPlant(plants[i]);
+                plantDiv.innerHTML += printsPlantLink(plants[i]);
+                modal.style.display = 'block';
+              });
+
+              // Append the button to the button container
+              buttonContainer.appendChild(button);
+
+              const span = document.querySelector('.close');
+              span.onclick = function() {
+                const modal = document.getElementById('myModal');
+                modal.style.display = 'none';
+              };
+
+              window.onclick = function(event) {
+                const modal = document.getElementById('myModal');
+                if (event.target === modal) {
+                  modal.style.display = 'none';
+                }
+              }
+            }
+            if (choice == 1) {
+              return;
+            }
+          }
+          if (inputString != "" && choice == 0) {
+            plantInfoDiv.innerHTML += '<h5> There are: ' + count + ' results</h5>';
+            if (count == 0) {
+              plantInfoDiv.innerHTML += '<h2 style="text-align: center;">This is not an exhaustive list of xeriscaping plants, just a collection of plants specifically catered for the Orange County, CA area. Please search for another plant!</h2>';
+            }
+          }
+        }
+      </script>
+      <div id="button-container">
+      </div>
+      <!-- Modal HTML code -->
+      <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">
+            &times;
+          </span>
+          <div id="plant">
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+  
+  </html>
